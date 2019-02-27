@@ -19,7 +19,6 @@ public abstract class UserMapper {
 	@Mapping(source = "phoneNumber", target = "phonenumber")
 	@Mapping(source = "email", target = "email")
 	@Mapping(ignore = true, target = "roles")
-
 	public abstract com.bdeb.service.user.User toUser(com.bdeb.application.user.model.User user);
 
 	@AfterMapping
@@ -31,6 +30,7 @@ public abstract class UserMapper {
 				userTarget.getRoles().add(getRole(listeRole.get(i).getRole()));
 			}
 		}
+		
 	}
 
 	public abstract List<com.bdeb.service.user.User> toUser(List<com.bdeb.application.user.model.User> userSource);

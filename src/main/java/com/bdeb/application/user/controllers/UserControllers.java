@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,10 +32,11 @@ public class UserControllers {
 
 	@Autowired
 	UserService userService;
+	
 	@Autowired 
 	ObjectMapper jsonMapper;
 
-	@PostMapping("/add")
+	@PostMapping(path = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> add(@RequestBody @Valid com.bdeb.service.user.User user, @RequestHeader(name="Security-Header" , required=true) String securityHeader,BindingResult result) throws JsonParseException, JsonMappingException, IOException {
 		verifyValidationError(result);
 		userService.addUser(user,jsonMapper.readValue(securityHeader, SecurityHeader.class));
@@ -42,17 +44,16 @@ public class UserControllers {
 	}
 
 	
-	@GetMapping("/{username}")
+	@GetMapping(path="/{username}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<com.bdeb.service.user.User> getUser(@PathVariable("username") String username,
 			@RequestHeader(name="Security-Header" , required=true) String securityHeader) throws JsonParseException, JsonMappingException, IOException {
-		//verifyValidationError(result);
-		return new ResponseEntity<User>(userService.getUser(username, jsonMapper.readValue(securityHeader, SecurityHeader.class)), HttpStatus.OK);
+		ResponseEntity<User> rep = new ResponseEntity<User>(userService.getUser(username, jsonMapper.readValue(securityHeader, SecurityHeader.class)), HttpStatus.OK);
+		return rep;
 	}
 	
-	@GetMapping(path="/list", headers = "Accept=application/json" )
+	@GetMapping(path="/list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<com.bdeb.service.user.User>> getListUser(
 			@RequestHeader(name="Security-Header" , required=true) String securityHeader)throws JsonParseException, JsonMappingException, IOException {
-		//verifyValidationError(result);
 		return new ResponseEntity<List<com.bdeb.service.user.User>>(userService.geListUser(jsonMapper.readValue(securityHeader, SecurityHeader.class)), HttpStatus.OK);
 	}
 	
