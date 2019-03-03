@@ -53,6 +53,11 @@
 
 		<dependency>
 			<groupId>com.bdeb</groupId>
+			<artifactId>application.email</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.bdeb</groupId>
 			<artifactId>application.resources</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

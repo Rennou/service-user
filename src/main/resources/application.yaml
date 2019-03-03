@@ -11,6 +11,7 @@ server:
       
 application:
   name: service-user
+  password: tanis123
 
 security:
   charset: UTF-8

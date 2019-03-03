@@ -1,6 +1,7 @@
 package com.bdeb.application.user.controllers;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -37,7 +38,7 @@ public class UserControllers {
 	ObjectMapper jsonMapper;
 
 	@PostMapping(path = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> add(@RequestBody @Valid com.bdeb.service.user.User user, @RequestHeader(name="Security-Header" , required=true) String securityHeader,BindingResult result) throws JsonParseException, JsonMappingException, IOException {
+	public ResponseEntity<Void> add(@RequestBody @Valid com.bdeb.service.user.User user, @RequestHeader(name="Security-Header" , required=true) String securityHeader,BindingResult result) throws JsonParseException, JsonMappingException, IOException, URISyntaxException {
 		verifyValidationError(result);
 		userService.addUser(user,jsonMapper.readValue(securityHeader, SecurityHeader.class));
 		return new ResponseEntity<>(null, HttpStatus.CREATED);

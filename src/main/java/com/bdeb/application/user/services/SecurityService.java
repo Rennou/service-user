@@ -39,7 +39,7 @@ public class SecurityService {
 		
 			service = serviceRepository.getService(username);
 			if ((null == service) || (!hash(password).equalsIgnoreCase(service.getPassword()))) {
-				throw new AuthentificationException("Authentification Faild1");
+				throw new AuthentificationException("Authentification Faild");
 			}
 			return service;
 		
