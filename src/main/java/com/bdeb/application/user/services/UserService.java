@@ -4,11 +4,13 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.bdeb.application.user.exception.DataNotFoundException;
 import com.bdeb.application.user.exception.DataPersistentException;
-import com.bdeb.application.user.exception.SendEmailException;
 import com.bdeb.application.user.mapper.UserMapper;
 import com.bdeb.application.user.repository.RoleRepository;
 import com.bdeb.application.user.repository.UserRepository;
@@ -27,12 +29,11 @@ public class UserService {
 	SystemService systemService;
 	@Autowired
 	UserMapper userMapper;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	public com.bdeb.service.user.User getUser(String username, SecurityHeader securityHeader) {
 
-		// com.bdeb.application.user.model.Service service =
-		// systemService.getSystem(securityHeader);
-		/// if (null != service) {
 		systemService.getSystem(securityHeader);
 		com.bdeb.application.user.model.User user = userRepository.getUser(username);
 		if (null != user) {
@@ -77,16 +78,15 @@ public class UserService {
 			user.setUsersRoles(listeUserRole);
 			userRepository.save(user);
 
+			try {
+				emailService.sendMail(user);
+			} catch (Exception e) {
+			}
+
 		} catch (Exception e) {
 			throw new DataPersistentException("Data not Inserted" + e.getMessage());
 		}
 
-		try {
-
-			emailService.sendMail(user);
-		} catch (Exception e) {
-			throw new SendEmailException("Error sending Email " + e.getMessage());
-		}
 	}
 
 	private com.bdeb.application.user.model.User mapToUser(com.bdeb.service.user.User userInfo,
@@ -94,7 +94,7 @@ public class UserService {
 		com.bdeb.application.user.model.User user;
 		user = new com.bdeb.application.user.model.User();
 		user.setUsername(userInfo.getUsername());
-		user.setPassword(userInfo.getPassword());
+		user.setPassword(passwordEncoder.encode(userInfo.getPassword()));
 		user.setFirstName(userInfo.getFirstname());
 		user.setLastName(userInfo.getLastname());
 		user.setEmail(userInfo.getEmail());

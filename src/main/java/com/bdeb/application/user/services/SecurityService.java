@@ -17,7 +17,7 @@ public class SecurityService {
 	String charset;
 
 	@Value("${security.algorithm}")
-	String algorithm;
+	String algorithm; 
 
 	@Autowired
 	UserRepository userRepository;

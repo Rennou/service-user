@@ -6,6 +6,10 @@ spring:
       username: root
       password: phoenixe
 
+service:
+  email:
+    url: http://localhost:8091/emails/
+
 server:
   port: 8090
       

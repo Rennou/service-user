@@ -28,7 +28,7 @@ public class UserRepository {
 			c.setTime(new Date());
 			user.setPasswordExpirationDate(c.getTime());
 			em.persist(user);
-		}
+		} 
 	}
 
 	@Transactional

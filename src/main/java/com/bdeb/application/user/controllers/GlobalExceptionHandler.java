@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.bdeb.application.user.exception.AuthentificationException;
 import com.bdeb.application.user.exception.DataNotFoundException;
 import com.bdeb.application.user.exception.DataPersistentException;
-import com.bdeb.application.user.exception.SendEmailException;
 import com.bdeb.application.user.exception.ValidationException;
 import com.bdeb.service.error.ErrorType;
 import com.bdeb.service.error.ProblemRest;
@@ -31,26 +30,13 @@ public class GlobalExceptionHandler {
 		problem.setType(ErrorType.CLIENT);
 		problem.setDate(new Date());
 		problem.setSystem(appId);
-
+ 
 		for (ObjectError objectError : e.getErrors().getAllErrors()) {
 			com.bdeb.service.error.Error error = new com.bdeb.service.error.Error();
 			error.setChamps(objectError.getObjectName());
 			error.setMessage(objectError.getDefaultMessage());
 			problem.getErrors().add(error);
 		}
-
-		return new ResponseEntity<>(problem, HttpStatus.BAD_REQUEST);
-	}
-
-	@ExceptionHandler(SendEmailException.class)
-	public ResponseEntity<?> handleSendEmailException(SendEmailException e) {
-		ProblemRest problem = new ProblemRest();
-		problem.setType(ErrorType.SERVER);
-		problem.setDate(new Date());
-		problem.setSystem(appId);
-		com.bdeb.service.error.Error error = new com.bdeb.service.error.Error();
-		error.setMessage(e.getMessage());
-		problem.getErrors().add(error);
 
 		return new ResponseEntity<>(problem, HttpStatus.BAD_REQUEST);
 	}

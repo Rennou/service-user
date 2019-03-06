@@ -39,7 +39,7 @@ public class UserControllers {
 
 	@PostMapping(path = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> add(@RequestBody @Valid com.bdeb.service.user.User user, @RequestHeader(name="Security-Header" , required=true) String securityHeader,BindingResult result) throws JsonParseException, JsonMappingException, IOException, URISyntaxException {
-		verifyValidationError(result);
+		verifyValidationError(result); 
 		userService.addUser(user,jsonMapper.readValue(securityHeader, SecurityHeader.class));
 		return new ResponseEntity<>(null, HttpStatus.CREATED);
 	}
